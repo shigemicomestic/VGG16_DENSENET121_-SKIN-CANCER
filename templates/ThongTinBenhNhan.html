@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chẩn Đoán Bệnh Ung Thư Da</title>
+    <style>
+        * {
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f5f5f5; /* Màu nền của trang */
+        }
+        
+        header {
+          background-color:#333; /* Màu nền header */
+          padding: 10px;
+          text-align: center;
+          font-size: 25px;
+          color: white;
+        }
+        
+        nav {
+          float: left;
+          width: 15%;
+          background-color: #f5f5f5;
+          padding: 20px;
+          height: 100vh;
+        }
+        
+        nav ul {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        nav ul li a {
+          color: black; /* Đổi màu chữ của liên kết thành trắng */
+          /*text-decoration: none; /* Loại bỏ gạch chân dưới liên kết */
+        }
+        
+        article {
+          float: left;
+          padding: 20px;
+          width: 85%;
+          background-color: #fff;
+          height: auto; /* Thay đổi chiều cao thành tự động */
+          text-align: center;
+        }
+        
+        form {
+            width: 85%;
+            margin: 0 auto; /* Căn giữa biểu mẫu */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left; /* Căn lề trái cho các label và input */
+        }
+
+        label {
+            font-weight: bold; /* Tạo đậm cho nhãn */
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%; /* Độ rộng 100% cho các input */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px; /* Tạo khoảng cách lớn hơn giữa input file và các input text khác */
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto; /* Căn giữa nút Chẩn Đoán */
+        }
+
+        section::after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+        
+        footer {
+          background-color: #333; /* Màu nền của footer */
+          padding: 10px;
+          text-align: left;
+          color: white;
+        }
+
+        @media (max-width: 600px) {
+          nav, article {
+            width: 100%;
+            height: auto;
+          }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Chẩn Đoán Bệnh Ung Thư Da</h2>
+    </header>
+    <section>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showInfo()">ThongTinBenhNhan</a></li>
+                <li><a href="#" onclick="showHistory()">LichSuKhamBenh</a></li>
+                <li><a href="#" onclick="showChanDoan()">ChanDoan</a></li>
+            </ul>
+        </nav>
+        
+        <article id="infoArticle">
+            <form method="POST" action="/thongtinbenhnhan" enctype="multipart/form-data">
+                <h1 style="text-align: center;" >Nhập Thông Tin Bệnh Nhân</h1>
+                <label for="MaBN">Mã Bệnh Nhân</label>
+                <input type="text" id="MaBN" name="MaBN" required>
+                <label for="TenBN">Tên Bệnh Nhân</label>
+                <input type="text" id="TenBN" name="TenBN" required>
+                <label for="NgaySinh">Ngày Sinh</label>
+                <input type="text" id="NgaySinh" name="NgaySinh" required>
+                <label>Giới Tính</label><br><br>
+                <input type="radio" id="Nam" name="GioiTinh" value="Nam" required>
+                <label for="Nam">Nam</label>
+                <input type="radio" id="Nu" name="GioiTinh" value="Nu" required>
+                <label for="Nu">Nữ</label><br><br>
+                <label for="sdt">Số Điện Thoại</label>
+                <input type="text" id="sdt" name="sdt" required>
+                <label for="DiaChi">Địa Chỉ</label>
+                <input type="text" id="DiaChi" name="DiaChi" required>
+                <input type="submit" value="Nhập thông tin">
+            </form>
+        </article>
+        <article id="historyArticle" style="display: none;"> 
+            <form method="POST" action="/LSK">
+                <!-- Your form for Lịch Sử Khám Bệnh -->
+            </form>
+        </article>
+        <article id="chandoan" style="display: none;"> 
+            <!-- Your content related to ChanDoan -->
+            <form method="POST" action="/chndoan">
+                <!-- Your form for Lịch Sử Khám Bệnh -->
+            </form>
+        </article>
+    </section>
+    
+    <footer>
+        <p>Thành Viên Nhóm:</p>
+        <p>Nguyễn Thi Hồng Quyên</p>
+        <p>Phạm Nhựt Thắng</p>
+    </footer>
+
+    <script>
+        function displayImage() {
+    var fileInput = document.getElementById('fileInput');
+    var selectedImage = document.getElementById('selectedImage');
+    var MAX_WIDTH = 600;
+    var MAX_HEIGHT = 450;
+
+    if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var img = new Image();
+            img.src = e.target.result;
+
+            img.onload = function () {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                var width = img.width;
+                var height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                selectedImage.src = canvas.toDataURL('image/jpeg'); // Set the image source with resized image
+                selectedImage.style.display = 'block'; // Show the selected image
+            };
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        selectedImage.src = '#';
+        selectedImage.style.display = 'none'; // Hide the image if no file is selected
+    }
+}
+    
+    function showInfo() {
+    document.getElementById("infoArticle").style.display = "block";
+    document.getElementById("historyArticle").style.display = "none";
+    document.getElementById("chandoan").style.display = "none";
+    }
+    
+    function showHistory() {
+        // Make an AJAX request to fetch the LichSuKham data and update the "historyArticle" section
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                document.getElementById("infoArticle").style.display = "none"; // Hide Thông Tin Bệnh Nhân
+                document.getElementById("historyArticle").style.display = "block"; // Show Lịch Sử Khám Bệnh
+                document.getElementById("historyArticle").innerHTML = this.responseText; // Update the content
+                document.getElementById("chandoan").style.display = "none";
+            }
+        };
+        xhttp.open("GET", "/LSK", true);
+        xhttp.send();
+    }
+
+    function showChanDoan() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("infoArticle").style.display = "none";
+                    document.getElementById("historyArticle").style.display = "none";
+                    document.getElementById("chandoan").style.display = "block";
+                    document.getElementById("chandoan").innerHTML = this.responseText;
+                }
+            };
+        xhttp.open("GET", "/chandoan", true);
+        xhttp.send();
+    }
+</script>
+</body>
+</html>

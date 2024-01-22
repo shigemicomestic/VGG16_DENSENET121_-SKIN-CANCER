@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết Quả Chẩn Đoán</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="script.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+    
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            text-align: center;
+            align-items: center;
+        }
+        
+        
+        header {
+            background-color: #333; /* Màu nền header */
+            padding: 10px;
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            width: 100%;
+        }
+    
+        header p {
+            margin: 0;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: nowrap; /* Không cho các thành phần xuống dòng */
+        }
+
+        .form-group label {
+            flex: 0 0 50%; /* Đặt kích thước cho label */
+            text-align: right;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"]
+        {
+            flex: 1 0 70%; /* Input chiếm 70% chiều rộng */
+            background-color: #f1f1f1;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+        
+        .form-group textarea {
+            flex:  1 0 100%; /* Input chiếm toàn bộ phần còn lại */
+            background-color: #f1f1f1;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .form-group.checkbox {
+            align-items: flex-start; /* Căn chỉnh checkbox và label trên cùng một dòng */
+        }
+
+        .button {
+            width: 150px;
+            height: 50px;
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            padding: 10px;
+            text-align: left;
+            color: white;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header">
+                <div>
+                    <h1>Chẩn Đoán Bệnh Ung Thư Da</h1>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container" style="margin: 0 auto;">
+                <h2 style="text-align: center;">Kết Quả Chẩn Đoán</h2>
+                <form method="POST" action="/save_result">
+                    <div class="form-group">
+                        <label for="MaBN">Mã Bệnh Nhân:</label>
+                        <input type="text" id="MaBN" name="MaBN" value="{{ maBN }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="NgayKham">Ngày Khám:</label>
+                        <input type="text" id="NgayKham" name="NgayKham" value="{{ ngayKham }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="ChanDoan">Chẩn Đoán:</label>
+                        <input type="text" id="ChanDoan" name="ChanDoan" value="{{ chanDoan }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="PhanTram">Phần Trăm Dự Đoán:</label>
+                        <input type="text" id="PhanTram" name="PhanTram" value="{{ phanTram }}%" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="GhiChu">Ghi Chú:</label>
+                        <textarea type="text" id="GhiChu" name="GhiChu" style="width: 300px; height: 150px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ChanDoanBS">Chẩn Đoán của Bác Sĩ:</label>
+                        <textarea type="text" id="Ykien" name="ChanDoanBS" style="width: 300px; height: 100px;"></textarea>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label for="bacsi">Bác sĩ đồng ý: </label>
+                        <input type="checkbox" id="bacsi" name="bacsi" value="Bike">
+                    </div>
+                    <button class="button" type="submit">Lưu Kết Quả</button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Thành Viên Nhóm:</p>
+            <p>Nguyễn Thi Hồng Quyên</p>
+            <p>Phạm Nhựt Thắng</p>
+        </footer>
+    </div>
+    <script>
+        function displayImage() {
+            var selectedImage = document.getElementById('selectedImage');
+            var imageInput = document.getElementById('fileInput');
+            
+            if (imageInput.files && imageInput.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    selectedImage.src = e.target.result;
+                    selectedImage.style.display = 'block'; // Hiển thị hình ảnh đã chọn
+                };
+                
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

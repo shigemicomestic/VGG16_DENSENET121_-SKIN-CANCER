@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chẩn Đoán</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        form {
+            width: 85%;
+            margin: 0 auto; /* Center the form */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left; /* Align labels and inputs to the left */
+        }
+        .fileInput {
+            max-width: 600px;
+            max-height: 450px;
+            width: auto;
+            height: auto;
+        }
+        input[type="text"],
+        input[type="file"] {
+            width: 100%; /* 100% width for inputs */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px; /* Create larger space between file input and other text inputs */
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto; /* Center the "Chẩn Đoán" button */
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            appearance: none; /* Remove default arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>'); /* Add custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px;
+            padding-right: 30px; /* Adjust right padding to accommodate the arrow */
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <article> 
+            <form method="POST" action="/chandoan" enctype="multipart/form-data">
+                <h2 style="text-align: center;">Chẩn Đoán Bệnh</h2>
+                <label for="MaBN">Mã Bệnh Nhân</label><br>
+                <select id="MaBN" name="MaBN" onchange="getPatientDetails()">
+                    {% for row in rows %}
+                        <option value="{{ row.MaBN }}">{{ row.MaBN }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="NgayKham">Ngày Khám</label>
+                <input type="text" id="NgayKham" name="NgayKham" required><br>
+                
+                <label for="fileInput">Chọn hình ảnh:</label>
+                <input type="file" id="fileInput" name="fileInput" onchange="displayImage()"><br>
+                <img id="selectedImage" src="#" alt="Selected Image">
+                
+                <input type="submit" value="Chẩn Đoán">
+            </form>
+        </article>
+    </main>
+    <script type="text/javascript">
+        function getPatientDetails() {
+            var select = document.getElementById("MaBN");
+            var selectedIndex = select.selectedIndex;
+            var selectedMaBN = select.options[selectedIndex].value;
+
+            // Create an AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/chuandoan?MaBN=" + selectedMaBN, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var patientInfo = JSON.parse(xhr.responseText);
+                    document.getElementById("TenBN").value = patientInfo.TenBN || '';
+                    document.getElementById("GioiTinh").value = patientInfo.GioiTinh || '';
+                    document.getElementById("NgaySinh").value = patientInfo.NgaySinh || '';
+                }
+            };
+            xhr.send();
+        }
+    </script>  
+</body>
+</html>
